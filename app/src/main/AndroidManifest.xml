@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.suu.ktrinanm.puzzled">
+          package="edu.suu.ktrinanm.puzzled">
 
     <application
         android:allowBackup="true"
@@ -11,10 +11,24 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".PuzzleStep1">
+        </activity>
+        <activity android:name=".TakePicture">
+        </activity>
+        <activity android:name=".ChooseFromGallery">
+        </activity>
+        <activity android:name=".ConfirmPicture">
+        </activity>
+        <activity android:name=".ChooseSize">
+        </activity>
+        <activity android:name=".PuzzleScreen">
+        </activity>
+        <activity android:name=".viewOld">
         </activity>
     </application>
 
