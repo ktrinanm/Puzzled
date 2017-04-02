@@ -14,14 +14,13 @@
         android:layout_marginRight="8dp"
         android:onClick="onClick"
         android:text="Start New Puzzle"
-        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.653" />
+        app:layout_constraintVertical_bias="0.671" />
 
     <Button
         android:id="@+id/viewOldBtn"
@@ -48,4 +47,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewOldBtn" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="217dp"
+        android:layout_height="249dp"
+        app:srcCompat="@drawable/puzzle"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintVertical_bias="0.106" />
 </android.support.constraint.ConstraintLayout>
