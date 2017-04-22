@@ -39,6 +39,8 @@ public class PuzzleStep1 extends AppCompatActivity
         }
         else if(v.getId() == R.id.stepOneNewPic)
         {
+            Intent i = new Intent(this, TakePicture.class);
+            startActivity(i);
         }
     }
 
@@ -81,42 +83,4 @@ public class PuzzleStep1 extends AppCompatActivity
             return false;
         }
     }
-//
-//    private void storeImage(Bitmap image) {
-//        File pictureFile = getOutputMediaFile();
-////        if (pictureFile == null) {
-////            Log.d("TAG", "file is null");
-////            return;
-////        }
-//        try {
-//            FileOutputStream fos = new FileOutputStream(pictureFile);
-//            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
-//            fos.close();
-//        } catch (FileNotFoundException e) {
-//        } catch (IOException e) {
-//        }
-//    }
-//
-//    private  File getOutputMediaFile(){
-//        // To be safe, you should check that the SDCard is mounted
-//        // using Environment.getExternalStorageState() before doing this.
-//        File mediaStorageDir = new File(Environment.getDataDirectory()+"");
-//
-//        // This location works best if you want the created images to be shared
-//        // between applications and persist after your app has been uninstalled.
-//
-//        // Create the storage directory if it does not exist
-//        if (! mediaStorageDir.exists()){
-//            if (! mediaStorageDir.mkdirs()){
-//                return null;
-//            }
-//        }
-//        // Create a media file name
-//        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-//        File mediaFile;
-//        String mImageName="MI_"+ timeStamp +".png";
-//        filePath = mediaStorageDir.getPath() + File.separator + mImageName;
-//        mediaFile = new File(filePath);
-//        return mediaFile;
-//    }
 }

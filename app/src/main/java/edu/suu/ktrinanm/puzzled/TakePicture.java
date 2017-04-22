@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -24,6 +26,7 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -33,6 +36,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -54,9 +58,7 @@ public class TakePicture extends AppCompatActivity
     protected CaptureRequest.Builder captureRequestBuilder;
     private Size imageDimension;
     private ImageReader imageReader;
-    private File file;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -66,6 +68,8 @@ public class TakePicture extends AppCompatActivity
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
+
+    private String filePath = "tempfile.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -80,11 +84,6 @@ public class TakePicture extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 takePicture();
-
-                Intent i = new Intent(TakePicture.this, ConfirmPicture.class);
-                String path = Environment.getExternalStorageDirectory()+"/pic.jpg";
-                i.putExtra("imagepath", path);
-                startActivity(i);
             }
         });
     }
@@ -130,7 +129,7 @@ public class TakePicture extends AppCompatActivity
         @Override
         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            Toast.makeText(TakePicture.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+            Toast.makeText(TakePicture.this, "Saved:" + filePath, Toast.LENGTH_SHORT).show();
             createCameraPreview();
         }
     };
@@ -160,8 +159,8 @@ public class TakePicture extends AppCompatActivity
             if (characteristics != null) {
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
             }
-            int width = 640;
-            int height = 480;
+            int width = 400;
+            int height = 400;
             if (jpegSizes != null && 0 < jpegSizes.length) {
                 width = jpegSizes[0].getWidth();
                 height = jpegSizes[0].getHeight();
@@ -195,26 +194,54 @@ public class TakePicture extends AppCompatActivity
                         if (image != null) {
                             image.close();
                         }
+                        Intent i = new Intent(TakePicture.this, ConfirmPicture.class);
+                        i.putExtra("filePath", filePath);
+                        startActivity(i);
                     }
                 }
                 private void save(byte[] bytes) throws IOException {
-                    OutputStream output = null;
+/*                    OutputStream output = null;
                     try {
-                        output = new FileOutputStream(file);
+                        output = new FileOutputStream(filePath);
                         output.write(bytes);
                     } finally {
                         if (null != output) {
                             output.close();
                         }
                     }
+*/
+                    FileOutputStream fos = null;
+                    try {
+                        // Use the compress method on the Bitmap object to write image to
+                        // the OutputStream
+                        fos = openFileOutput(filePath, Context.MODE_PRIVATE);
+
+                        // Writing the bitmap to the output stream
+                        Bitmap image = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+                        image = Bitmap.createScaledBitmap(image, 400, 400, false);
+                        image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        Toast.makeText(TakePicture.this, "Saved:" + filePath, Toast.LENGTH_SHORT).show();
+                        fos.close();
+
+                    } catch (Exception e) {
+                        Log.e("saveToInternalStorage()", e.getMessage());
+                    }
+                    finally
+                    {
+                        if(null != fos){
+                            fos.close();
+                        }
+                    }
                 }
+
+
             };
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
             final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(TakePicture.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakePicture.this, "Saved:" + filePath, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
 
                 }
